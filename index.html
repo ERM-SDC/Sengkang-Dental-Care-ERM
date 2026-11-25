@@ -1,58 +1,52 @@
-]);
-  if (a.error) { alert('Gagal memuat pasien.'); return; }
-  const p = a.data, h = (b.data && b.data[0]) || {};
-  const rows = [
-    ['Nomor RM', p.no_rm], ['Nama', p.nama], ['NIK', p.nik], ['Nomor BPJS', p.no_bpjs],
-    ['Jenis kelamin', p.jenis_kelamin], ['Tempat, tanggal lahir', [p.tempat_lahir, p.tanggal_lahir].filter(Boolean).join(', ') + (p.tanggal_lahir ? ' (' + umur(p.tanggal_lahir) + ')' : '')],
-    ['Nomor HP', p.no_hp], ['Pekerjaan', p.pekerjaan], ['Alamat', p.alamat],
-    ['Penanggung jawab', [p.penanggung_jawab, p.no_hp_pj].filter(Boolean).join(' · ')],
-    ['Alergi', h.alergi], ['Penyakit sistemik', h.penyakit_sistemik], ['Obat rutin', h.obat_rutin]
-  ];
-  $('dlgBody').innerHTML = '<h2>' + esc(p.nama) + '</h2><dl>' +
-    rows.filter(r => r[1]).map(r => <dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>).join('') + '</dl>';
-  $('dlg').showModal();
-}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ERM Sengkang Dental Care</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-/* ---------- Form pasien baru ---------- */
-function bukaForm() {
-  $('form').innerHTML =
-    F.map(([k, l, t, o]) => <div><label for="f_${k}">${l}</label> +
-      (t === 'sel' ? <select id="f_${k}"><option value="">-</option>${o.map(x => <option>${x}</option>).join('')}</select>
-                   : <input id="f_${k}" type="${t}">) + '</div>').join('') +
-    M.map(([k, l]) => <div><label for="f_${k}">${l}</label><input id="f_${k}" type="text"></div>).join('');
-  $('formMsg').textContent = '';
-  $('formCard').classList.remove('hide');
-  $('f_nama').focus();
-}
+<div id="vLogin" class="card" style="max-width:380px;margin-top:10vh">
+  <h1>ERM Sengkang Dental Care</h1>
+  <small style="color:var(--mut)">Masuk dengan akun Anda</small>
+  <label for="em">Email</label><input id="em" type="email" autocomplete="username">
+  <label for="pw">Kata sandi</label><input id="pw" type="password" autocomplete="current-password">
+  <div style="margin-top:16px"><button id="btnLogin" style="width:100%">Masuk</button></div>
+  <div id="loginErr" class="err"></div>
+</div>
 
-async function simpan() {
-  const v = k => { const x = $('f_' + k).value.trim(); return x === '' ? null : x; };
-  if (!v('nama')) { $('formMsg').className = 'err'; $('formMsg').textContent = 'Nama wajib diisi.'; return; }
-  $('btnSave').disabled = true;
-  const rec = {}; F.forEach(([k]) => rec[k] = v(k));
-  const { data, error } = await sb.from('patients').insert(rec).select('id,no_rm').single();
-  if (error) { $('btnSave').disabled = false; $('formMsg').className = 'err'; $('formMsg').textContent = 'Gagal menyimpan: ' + error.message; return; }
-  const h = { patient_id: data.id }; let ada = false;
-  M.forEach(([k]) => { h[k] = v(k); if (h[k]) ada = true; });
-  if (ada) await sb.from('patient_medical_history').insert(h);
-  $('btnSave').disabled = false;
-  $('formCard').classList.add('hide');
-  $('q').value = '';
-  await muatDaftar();
-  alert('Pasien tersimpan. Nomor RM: ' + data.no_rm);
-}
+<div id="vApp" class="hide">
+  <div class="bar">
+    <div><strong id="uNama"></strong><br><small id="uRole" style="color:var(--mut)"></small></div>
+    <button class="alt" id="btnOut">Keluar</button>
+  </div>
+  <div class="nav">
+    <span class="on">Pasien</span><span>Pendaftaran</span><span>Rekam Medis</span><span>Kasir</span>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <input id="q" placeholder="Cari nama, nomor RM, NIK, atau HP" style="flex:1;min-width:200px">
+      <button id="btnNew">+ Pasien baru</button>
+    </div>
+    <div id="list" style="margin-top:10px"></div>
+  </div>
+  <div id="formCard" class="card hide">
+    <h2>Pasien baru</h2>
+    <div id="form" class="grid"></div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+      <button id="btnSave">Simpan</button><button class="alt" id="btnCancel">Batal</button>
+    </div>
+    <div id="formMsg"></div>
+  </div>
+</div>
 
-/* ---------- Pasang tombol ---------- */
-$('btnLogin').onclick = masuk;
-$('pw').addEventListener('keydown', e => { if (e.key === 'Enter') masuk(); });
-$('btnOut').onclick = keluar;
-$('btnNew').onclick = bukaForm;
-$('btnCancel').onclick = () => $('formCard').classList.add('hide');
-$('btnSave').onclick = simpan;
-$('dlgClose').onclick = () => $('dlg').close();
-$('q').addEventListener('input', () => { clearTimeout(tmr); tmr = setTimeout(muatDaftar, 300); });
-$('list').addEventListener('click', e => { const r = e.target.closest('.row'); if (r) detail(r.dataset.id); });
-mulai();
-</script>
+<dialog id="dlg"><div id="dlgBody"></div><div style="margin-top:14px"><button class="alt" id="dlgClose">Tutup</button></div></dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="app1.js"></script>
+<script src="app2.js"></script>
+<script src="app3.js"></script>
 </body>
 </html>
