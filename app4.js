@@ -17,12 +17,8 @@ $('vDaftar').innerHTML =
   '<div><label for="kJenis">Jenis kunjungan</label><select id="kJenis"><option>Baru</option><option>Kontrol</option>' +
   '<option>Emergency</option><option>Konsultasi</option><option>Tindakan</option></select></div></div>' +
   '<label for="kKeluhan">Keluhan utama</label><input id="kKeluhan">' +
-  '<label>Tindakan dan biaya (boleh dikosongkan)</label><div id="kRows"></div>' +
-  '<div style="margin-top:8px"><button type="button" class="alt" id="kTambah">+ Tambah tindakan</button></div>' +
-  '<div class="tot" id="kTotal">Total: Rp0</div>' +
   '<div style="margin-top:12px;display:flex;gap:8px"><button id="kSimpan">Daftarkan</button>' +
-  '<button class="alt" id="kBatal">Batal</button></div><div id="kMsg"></div></div>' +
-  '<datalist id="dlTind"></datalist></div>' +
+  '<button class="alt" id="kBatal">Batal</button></div><div id="kMsg"></div></div></div>' +
   '<div class="card"><h2>Kunjungan hari ini</h2><div id="kDaftar"></div></div>';
 
 function tab(nama) {
