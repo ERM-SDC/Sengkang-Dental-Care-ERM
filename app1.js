@@ -6,7 +6,7 @@ var ROLE = { admin: 'Admin', dokter: 'Dokter', asisten: 'Asisten/Perawat', kasir
 
 function esc(s) {
   var d = document.createElement('div');
-  d.textContent = (s === null || s === undefined) ? '' : String(s);
+  d.textContent = (s == null) ? '' : String(s);
   return d.innerHTML;
 }
 
@@ -37,14 +37,16 @@ async function mulai() {
   if (!session) { tampil(false); return; }
   var r = await sb.from('users').select('nama_lengkap,role_id,aktif').eq('id', session.user.id).maybeSingle();
   var data = r.data;
-  if (r.error  !data  !data.aktif) {
+  var ok = !r.error && data && data.aktif;
+  if (!ok) {
     await sb.auth.signOut();
     $('loginErr').textContent = 'Akun ini belum terdaftar atau tidak aktif. Hubungi admin.';
     tampil(false);
     return;
   }
   $('uNama').textContent = data.nama_lengkap;
-  $('uRole').textContent = ROLE[data.role_id] || data.role_id;
+  var nm = ROLE[data.role_id];
+  $('uRole').textContent = nm ? nm : data.role_id;
   tampil(true);
   muatDaftar();
   setIdle();
