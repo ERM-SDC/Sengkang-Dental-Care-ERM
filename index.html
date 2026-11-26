@@ -8,6 +8,13 @@
 </head>
 <body>
 
+<div id="dbg" style="position:fixed;bottom:0;left:0;right:0;background:#fff3cd;color:#000;font:12px/1.4 monospace;padding:6px;z-index:99;max-height:40vh;overflow:auto;white-space:pre-wrap"></div>
+<script>
+var L=function(t){document.getElementById('dbg').textContent+=t+'\n'};
+window.addEventListener('error',function(e){L('ERROR: '+(e.message('gagal memuat '+(e.target&&(e.target.srce.target.href))))+(e.lineno?' ('+String(e.filename||'').split('/').pop()+':'+e.lineno+')':''))},true);
+window.addEventListener('unhandledrejection',function(e){L('JANJI GAGAL: '+(e.reason&&e.reason.message||e.reason))});
+</script>
+
 <div id="vLogin" class="card" style="max-width:380px;margin-top:10vh">
   <h1>ERM Sengkang Dental Care</h1>
   <small style="color:var(--mut)">Masuk dengan akun Anda</small>
@@ -48,5 +55,9 @@
 <script src="app1.js"></script>
 <script src="app2.js"></script>
 <script src="app3.js"></script>
+<script>
+L('supabase: '+typeof supabase+' | masuk: '+typeof masuk+' | simpan: '+typeof simpan+' | tombol: '+(document.getElementById('btnLogin').onclick?'terpasang':'BELUM terpasang'));
+document.getElementById('btnLogin').addEventListener('click',function(){L('tombol Masuk diketuk')});
+</script>
 </body>
 </html>
