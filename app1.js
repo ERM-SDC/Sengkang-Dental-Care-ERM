@@ -1,54 +1,76 @@
-const SB_URL = 'https://ypmrbbccpgsrulvhsrkn.supabase.co';
-const SB_KEY = 'sb_publishable_rOYB_Y-z5JcJNnd1B3fTzg_Z3XbLoJI';
-const sb = supabase.createClient(SB_URL, SB_KEY);
-const $ = id => document.getElementById(id);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const ROLE = {admin:'Admin', dokter:'Dokter', asisten:'Asisten/Perawat', kasir:'Kasir'};
+var SB_URL = 'https://ypmrbbccpgsrulvhsrkn.supabase.co';
+var SB_KEY = 'sb_publishable_rOYB_Y-z5JcJNnd1B3fTzg_Z3XbLoJI';
+var sb = supabase.createClient(SB_URL, SB_KEY);
+var $ = function (id) { return document.getElementById(id); };
+var ROLE = { admin: 'Admin', dokter: 'Dokter', asisten: 'Asisten/Perawat', kasir: 'Kasir' };
 
-const umur = d => {
-  if (!d) return '';
-  const b = new Date(d), n = new Date();
-  let a = n.getFullYear() - b.getFullYear();
-  if (n < new Date(n.getFullYear(), b.getMonth(), b.getDate())) a--;
-  return a + ' th';
-};
+function esc(s) {
+  var d = document.createElement('div');
+  d.textContent = (s === null || s === undefined) ? '' : String(s);
+  return d.innerHTML;
+}
+
+function umur(d) {
+  if (!d) return '';
+  var b = new Date(d), n = new Date();
+  var a = n.getFullYear() - b.getFullYear();
+  if (n < new Date(n.getFullYear(), b.getMonth(), b.getDate())) a--;
+  return a + ' th';
+}
 
 async function masuk() {
-  $('loginErr').textContent = '';
-  $('btnLogin').disabled = true;
-  const { error } = await sb.auth.signInWithPassword({ email: $('em').value.trim(), password: $('pw').value });
-  $('btnLogin').disabled = false;
-  if (error) { $('loginErr').textContent = 'Email atau kata sandi salah.'; return; }
-  await mulai();
+  $('loginErr').textContent = '';
+  $('btnLogin').disabled = true;
+  try {
+    var res = await sb.auth.signInWithPassword({ email: $('em').value.trim(), password: $('pw').value });
+    if (res.error) { $('loginErr').textContent = 'Email atau kata sandi salah.'; }
+    else { await mulai(); }
+  } catch (e) {
+    $('loginErr').textContent = 'Kesalahan: ' + e.message;
+  }
+  $('btnLogin').disabled = false;
 }
 
 async function mulai() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) { tampil(false); return; }
-  const { data, error } = await sb.from('users').select('nama_lengkap,role_id,aktif').eq('id', session.user.id).maybeSingle();
-  if (error !data !data.aktif) {
-    await sb.auth.signOut();
-    $('loginErr').textContent = 'Akun ini belum terdaftar atau tidak aktif. Hubungi admin.';
-    tampil(false); return;
-  }
-  $('uNama').textContent = data.nama_lengkap;
-  $('uRole').textContent = ROLE[data.role_id] || data.role_id;
-  tampil(true);
-  muatDaftar();
-  setIdle();
+  var s = await sb.auth.getSession();
+  var session = s.data.session;
+  if (!session) { tampil(false); return; }
+  var r = await sb.from('users').select('nama_lengkap,role_id,aktif').eq('id', session.user.id).maybeSingle();
+  var data = r.data;
+  if (r.error  !data  !data.aktif) {
+    await sb.auth.signOut();
+    $('loginErr').textContent = 'Akun ini belum terdaftar atau tidak aktif. Hubungi admin.';
+    tampil(false);
+    return;
+  }
+  $('uNama').textContent = data.nama_lengkap;
+  $('uRole').textContent = ROLE[data.role_id] || data.role_id;
+  tampil(true);
+  muatDaftar();
+  setIdle();
 }
 
 function tampil(app) {
-  $('vLogin').classList.toggle('hide', app);
-  $('vApp').classList.toggle('hide', !app);
-  if (!app) { $('pw').value = ''; }
+  $('vLogin').classList.toggle('hide', app);
+  $('vApp').classList.toggle('hide', !app);
+  if (!app) { $('pw').value = ''; }
 }
 
-async function keluar() { await sb.auth.signOut(); tampil(false); }
+async function keluar() {
+  await sb.auth.signOut();
+  tampil(false);
+}
 
-let idleT;
+var idleT;
 function setIdle() {
-  clearTimeout(idleT);
-  idleT = setTimeout(async () => { await keluar(); $('loginErr').textContent = 'Sesi berakhir karena tidak ada aktivitas.'; }, 15 * 60 * 1000);
+  clearTimeout(idleT);
+  idleT = setTimeout(async function () {
+    await keluar();
+    $('loginErr').textContent = 'Sesi berakhir karena tidak ada aktivitas.';
+  }, 900000);
 }
-['click','keydown','touchstart'].forEach(e => document.addEventListener(e, () => { if (!$('vApp').classList.contains('hide')) setIdle(); }));
+['click', 'keydown', 'touchstart'].forEach(function (e) {
+  document.addEventListener(e, function () {
+    if (!$('vApp').classList.contains('hide')) setIdle();
+  });
+});
