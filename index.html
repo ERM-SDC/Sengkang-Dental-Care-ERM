@@ -10,44 +10,47 @@
 .trow .tn{flex:2;min-width:0}
 .trow .tb{flex:1;min-width:0}
 .tot{font-weight:700;margin-top:10px}
+textarea{width:100%;padding:11px;font:inherit;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--tx)}
+.ok{color:var(--pri);margin-top:8px}
 .st{font-size:.8rem;padding:2px 8px;border-radius:10px;border:1px solid var(--line);color:var(--mut)}
 </style>
 </head>
 <body>
 <div id="vLogin" class="card" style="max-width:380px;margin-top:10vh">
-  <h1>ERM Sengkang Dental Care</h1>
-  <small style="color:var(--mut)">Masuk dengan akun Anda</small>
-  <label for="em">Email</label><input id="em" type="email" autocomplete="username">
-  <label for="pw">Kata sandi</label><input id="pw" type="password" autocomplete="current-password">
-  <div style="margin-top:16px"><button id="btnLogin" style="width:100%">Masuk</button></div>
-  <div id="loginErr" class="err"></div>
+  <h1>ERM Sengkang Dental Care</h1>
+  <small style="color:var(--mut)">Masuk dengan akun Anda</small>
+  <label for="em">Email</label><input id="em" type="email" autocomplete="username">
+  <label for="pw">Kata sandi</label><input id="pw" type="password" autocomplete="current-password">
+  <div style="margin-top:16px"><button id="btnLogin" style="width:100%">Masuk</button></div>
+  <div id="loginErr" class="err"></div>
 </div>
 <div id="vApp" class="hide">
-  <div class="bar">
-    <div><strong id="uNama"></strong><br><small id="uRole" style="color:var(--mut)"></small></div>
-    <button class="alt" id="btnOut">Keluar</button>
-  </div>
-  <div class="nav" id="nav">
-    <span class="on" data-tab="pasien">Pasien</span><span data-tab="daftar">Pendaftaran</span><span>Rekam Medis</span><span>Kasir</span>
-  </div>
-  <div id="vPasien">
-    <div class="card">
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <input id="q" placeholder="Cari nama, nomor RM, NIK, atau HP" style="flex:1;min-width:200px">
-        <button id="btnNew">+ Pasien baru</button>
-      </div>
-      <div id="list" style="margin-top:10px"></div>
-    </div>
-    <div id="formCard" class="card hide">
-      <h2>Pasien baru</h2>
-      <div id="form" class="grid"></div>
-      <div style="margin-top:14px;display:flex;gap:8px">
-        <button id="btnSave">Simpan</button><button class="alt" id="btnCancel">Batal</button>
-      </div>
-      <div id="formMsg"></div>
-    </div>
-  </div>
-  <div id="vDaftar" class="hide"></div>
+  <div class="bar">
+    <div><strong id="uNama"></strong><br><small id="uRole" style="color:var(--mut)"></small></div>
+    <button class="alt" id="btnOut">Keluar</button>
+  </div>
+  <div class="nav" id="nav">
+    <span class="on" data-tab="pasien">Pasien</span><span data-tab="daftar">Pendaftaran</span><span data-tab="rekam">Rekam Medis</span><span>Kasir</span>
+  </div>
+  <div id="vPasien">
+    <div class="card">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input id="q" placeholder="Cari nama, nomor RM, NIK, atau HP" style="flex:1;min-width:200px">
+        <button id="btnNew">+ Pasien baru</button>
+      </div>
+      <div id="list" style="margin-top:10px"></div>
+    </div>
+    <div id="formCard" class="card hide">
+      <h2>Pasien baru</h2>
+      <div id="form" class="grid"></div>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button id="btnSave">Simpan</button><button class="alt" id="btnCancel">Batal</button>
+      </div>
+      <div id="formMsg"></div>
+    </div>
+  </div>
+  <div id="vDaftar" class="hide"></div>
+  <div id="vRekam" class="hide"></div>
 </div>
 <dialog id="dlg"><div id="dlgBody"></div><div style="margin-top:14px"><button class="alt" id="dlgClose">Tutup</button></div></dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -57,6 +60,10 @@
 <script src="app5.js"></script>
 <script src="app6.js"></script>
 <script src="app7.js"></script>
+<script src="app8.js"></script>
+<script src="app9.js"></script>
+<script src="app10.js"></script>
+<script src="app11.js"></script>
 <script src="app3.js"></script>
 </body>
-                   </html>
+</html>
