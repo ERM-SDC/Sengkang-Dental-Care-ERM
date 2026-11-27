@@ -12,6 +12,9 @@
 .tot{font-weight:700;margin-top:10px}
 textarea{width:100%;padding:11px;font:inherit;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--tx)}
 .ok{color:var(--pri);margin-top:8px}
+.lpk{flex:1;min-width:130px;border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer}
+.lpk.on{border-color:var(--pri);background:#eef7f6}
+.lpk b{display:block;font-size:1.05rem}
 .st{font-size:.8rem;padding:2px 8px;border-radius:10px;border:1px solid var(--line);color:var(--mut)}
 </style>
 </head>
@@ -30,7 +33,7 @@ textarea{width:100%;padding:11px;font:inherit;border:1px solid var(--line);borde
     <button class="alt" id="btnOut">Keluar</button>
   </div>
   <div class="nav" id="nav">
-    <span class="on" data-tab="pasien">Pasien</span><span data-tab="daftar">Pendaftaran</span><span data-tab="rekam">Rekam Medis</span><span>Kasir</span>
+    <span class="on" data-tab="pasien">Pasien</span><span data-tab="daftar">Pendaftaran</span><span data-tab="rekam">Rekam Medis</span><span data-tab="kasir">Kasir</span><span data-tab="laporan">Laporan</span>
   </div>
   <div id="vPasien">
     <div class="card">
@@ -51,6 +54,8 @@ textarea{width:100%;padding:11px;font:inherit;border:1px solid var(--line);borde
   </div>
   <div id="vDaftar" class="hide"></div>
   <div id="vRekam" class="hide"></div>
+  <div id="vKasir" class="hide"></div>
+  <div id="vLaporan" class="hide"></div>
 </div>
 <dialog id="dlg"><div id="dlgBody"></div><div style="margin-top:14px"><button class="alt" id="dlgClose">Tutup</button></div></dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -64,6 +69,14 @@ textarea{width:100%;padding:11px;font:inherit;border:1px solid var(--line);borde
 <script src="app9.js"></script>
 <script src="app10.js"></script>
 <script src="app11.js"></script>
+<script src="app12.js"></script>
+<script src="app13.js"></script>
+<script src="app14.js"></script>
+<script src="app15.js"></script>
+<script src="app16.js"></script>
+<script src="app17.js"></script>
+<script src="app18.js"></script>
+<script src="app19.js"></script>
 <script src="app3.js"></script>
 </body>
 </html>
